@@ -1,0 +1,5 @@
+- name: Configure Keepalived
+  hosts: loadbalancers
+  become: yes
+  roles:
+    - keepalived

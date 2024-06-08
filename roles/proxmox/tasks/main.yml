@@ -1,0 +1,6 @@
+# Tasks for configuring Proxmox
+- name: Include base package installation
+  include_tasks: files/install_base_packages.yml
+
+- name: Include VM deployment
+  include_tasks: files/deploy_qcow2_vms.yml

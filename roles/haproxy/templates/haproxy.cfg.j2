@@ -1,0 +1,37 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+    tune.ssl.default-dh-param 2048
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+frontend http_front
+    bind *:80
+    bind *:443 ssl crt /etc/haproxy/certs/k8s_unilab_wildcard.pem \
+        ssl-default-bind-ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256 \
+        ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11
+
+    acl is_k8s_ingress hdr_end(host) -i {{ domain_suffix }}
+    use_backend k8s_ingress_backend if is_k8s_ingress
+
+backend k8s_ingress_backend
+    mode http
+    balance roundrobin
+    option httpchk GET /healthz
+    default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
+    server master1 {{ groups['masters'][0] }}:{{ kube_api_port }} check
+    server master2 {{ groups['masters'][1] }}:{{ kube_api_port }} check
+    server master3 {{ groups['masters'][2] }}:{{ kube_api_port }} check

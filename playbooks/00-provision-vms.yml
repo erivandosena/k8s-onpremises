@@ -1,0 +1,17 @@
+- name: Provision VMs on Proxmox
+  hosts: proxmox
+  gather_facts: no
+  vars_files:
+    - ../vars/vars.yml
+  tasks:
+    - name: Download QCOW2 image
+      get_url:
+        url: "{{ qcow2_image_url }}"
+        dest: "{{ qcow2_image }}"
+        mode: '0644'
+
+    - name: Deploy VMs using qcow2
+      include_tasks: ../roles/proxmox/files/deploy_qcow2_vms.yml
+
+    - name: Install base packages
+      include_tasks: ../roles/proxmox/files/install_base_packages.yml

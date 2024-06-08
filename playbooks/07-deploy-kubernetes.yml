@@ -1,0 +1,7 @@
+---
+- name: Deploy Kubernetes components
+  hosts: k8s-master
+  tasks:
+    - name: Apply network plugin
+      command: kubectl apply -f /etc/kubernetes/network-plugin.yaml
+      become: yes

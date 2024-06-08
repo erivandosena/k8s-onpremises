@@ -1,0 +1,5 @@
+- name: Update and upgrade packages
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_pkg_mgr == 'yum'

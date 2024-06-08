@@ -1,0 +1,35 @@
+---
+- name: Configure HAProxy
+  hosts: loadbalancers
+  become: yes
+  vars_files:
+    - ../vars/vars.yml
+  tasks:
+    - name: Install HAProxy
+      apt:
+        name: haproxy
+        state: present
+        update_cache: yes
+
+    - name: Upload SSL Certificate
+      copy:
+        src: "roles/haproxy/files/certs/{{ ssl_cert }}"
+        dest: "{{ ssl_cert_path }}/{{ ssl_cert }}"
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Configure HAProxy
+      template:
+        src: haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+
+    - name: Enable HAProxy
+      systemd:
+        name: haproxy
+        enabled: yes

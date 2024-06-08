@@ -1,0 +1,5 @@
+---
+- name: Bootstrap Kubernetes
+  hosts: k8s-master
+  roles:
+    - kubernetes

@@ -1,0 +1,105 @@
+---
+# Proxmox API
+proxmox_api_host: "your_proxmox_ip"
+proxmox_api_user: "your_proxmox_user"
+proxmox_api_password: "your_proxmox_password"
+proxmox_node: "your_proxmox_node"
+proxmox_storage: "local-lvm"
+
+# QCOW2 Image URL
+qcow2_image_url: "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img"
+qcow2_image: "/var/lib/vz/template/qcow2/focal-server-cloudimg-amd64.img"
+
+# VM Settings
+vm_memory: 2048
+vm_cores: 2
+vm_sockets: 1
+vm_disk: 10
+
+# Kubernetes Settings
+k8s_version: "1.20.0"
+calico_version: "v3.17.1"
+kubelet_version: "{{k8s_version}}-00"
+kubeadm_version: "{{k8s_version}}-00"
+kubectl_version: "{{k8s_version}}-00"
+containerd_version: "1.3.7-1"
+cni_plugins_version: "0.8.6-00"
+
+# MetalLB Settings
+metallb_version: "v0.9.3"
+metallb_address_pool: "192.168.1.240-192.168.1.250"
+
+# SSL Certificate
+ssl_cert_path: "/etc/haproxy/certs"
+ssl_cert: "wildcard.unilab.edu.br.pem"
+
+# Kubernetes API Port
+kube_api_port: 6443
+
+# Resource Pool
+resource_pool: "Kubernetes_C4"
+
+# Virtual IP
+virtual_ip: "172.16.0.10"
+
+# Public IP
+public_ip: "200.129.19.3"
+
+# Cluster Nodes
+nodes:
+  - name: "lb1"
+    vmid: 2014
+    memory: 2048
+    cores: 2
+    sockets: 1
+    disk: 10
+    node: "prox-r01-01"
+  - name: "lb2"
+    vmid: 2015
+    memory: 2048
+    cores: 2
+    sockets: 1
+    disk: 10
+    node: "prox-r01-01"
+  - name: "master1"
+    vmid: 2000
+    memory: 4096
+    cores: 2
+    sockets: 1
+    disk: 20
+    node: "prox-r02-03"
+  - name: "master2"
+    vmid: 2001
+    memory: 4096
+    cores: 2
+    sockets: 1
+    disk: 20
+    node: "prox-r02-02"
+  - name: "master3"
+    vmid: 2002
+    memory: 4096
+    cores: 2
+    sockets: 1
+    disk: 20
+    node: "prox-r02-01"
+  - name: "worker1"
+    vmid: 2004
+    memory: 2048
+    cores: 2
+    sockets: 1
+    disk: 10
+    node: "prox-r02-03"
+  - name: "worker2"
+    vmid: 2005
+    memory: 2048
+    cores: 2
+    sockets: 1
+    disk: 10
+    node: "prox-r02-02"
+  - name: "worker3"
+    vmid: 2006
+    memory: 2048
+    cores: 2
+    sockets: 1
+    disk: 10
+    node: "prox-r02-01"

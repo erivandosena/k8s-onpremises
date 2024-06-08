@@ -1,0 +1,25 @@
+---
+- name: Install base packages on all nodes
+  apt:
+    name:
+      - curl
+      - vim
+      - git
+      - net-tools
+    state: present
+  become: yes
+
+- name: Install Docker on workers
+  apt:
+    name: docker.io
+    state: present
+  become: yes
+  when: "'worker' in group_names"
+
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+  become: yes
+  when: "'worker' in group_names"

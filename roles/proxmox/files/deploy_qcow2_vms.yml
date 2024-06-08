@@ -1,0 +1,37 @@
+---
+- name: Criar Resource Pool no Proxmox
+  proxmox_pool:
+    api_host: "{{ proxmox_api_host }}"
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    pool: "{{ resource_pool }}"
+    state: present
+
+- name: Download QCOW2 image
+  get_url:
+    url: "{{ qcow2_image_url }}"
+    dest: "{{ qcow2_image }}"
+    mode: '0644'
+  delegate_to: localhost
+
+- name: Create VMs on Proxmox
+  proxmox_kvm:
+    api_host: "{{ proxmox_api_host }}"
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    node: "{{ item.node }}"
+    vmid: "{{ item.vmid }}"
+    name: "{{ item.name }}"
+    storage: "{{ proxmox_storage }}"
+    memory: "{{ item.memory }}"
+    cores: "{{ item.cores }}"
+    sockets: "{{ item.sockets }}"
+    disk: "{{ item.disk }}"
+    net0: "virtio,bridge=vmbr0"
+    ostype: "l26"
+    boot: "cdn"
+    args: "-drive file={{ qcow2_image }},if=virtio"
+    state: present
+    pool: "{{ resource_pool }}"
+  with_items: "{{ nodes }}"
+  delegate_to: localhost

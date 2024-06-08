@@ -1,0 +1,15 @@
+
+---
+- name: Copy SSL certificates
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/haproxy/certs/"
+  with_items:
+    - "certs/k8s_unilab_wildcard.pem"
+    - "certs/cadeiaintermediaria.crt"
+  notify: Restart HAProxy
+
+- name: Restart HAProxy
+  service:
+    name: haproxy
+    state: restarted

@@ -1,0 +1,13 @@
+---
+- name: Configure SSL certificates
+  hosts: haproxy
+  tasks:
+    - name: Copy SSL certificates
+      copy:
+        src: "{{ item }}"
+        dest: "/etc/haproxy/certs/"
+      with_items:
+        - "roles/haproxy/files/certs/k8s.unilab.edu.br.crt"
+        - "roles/haproxy/files/certs/k8s.unilab.edu.br.key"
+        - "roles/haproxy/files/certs/cadeiaintermediaria.crt"
+  become: yes

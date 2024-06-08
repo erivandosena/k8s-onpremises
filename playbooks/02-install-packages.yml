@@ -1,0 +1,11 @@
+- name: Install required packages
+  hosts: loadbalancers
+  become: yes
+  tasks:
+    - name: Install Keepalived and HAproxy
+      yum:
+        name:
+          - keepalived
+          - haproxy
+          - psmisc
+        state: present

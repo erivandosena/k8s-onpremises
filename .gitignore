@@ -1,0 +1,29 @@
+# Ignore certificados e chaves privadas
+roles/haproxy/files/certs/*.crt
+roles/haproxy/files/certs/*.key
+roles/haproxy/files/certs/*.pem
+
+# Ignore arquivos de variáveis sensíveis
+# vars/vars.yml
+
+# Ignore arquivos de inventário
+# inventory.ini
+
+# Ignore logs e arquivos temporários
+*.log
+*.tmp
+
+# Ignore diretórios e arquivos criados pelo Ansible durante execução
+*.retry
+__pycache__/
+.cache/
+*.pyc
+.vscode
+
+# Ignore arquivos de backup do editor
+*~
+*.swp
+
+# Ignore arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
